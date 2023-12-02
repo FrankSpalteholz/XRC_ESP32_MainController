@@ -35,6 +35,8 @@ class PS4_IO
         void setThumbStickMapLimits(uint8_t thumbStickNum, int mapLimitsX[2],  int mapLimitsY[2]); // num 0 = left right = 1; limits 0 = x 1 = y
         void setThumbStickMinMaxLimits(uint8_t thumbStickNum, int minMaxLimitsX[2], int minMaxLimitsY[2]); // num 0 = left right = 1; limits 0 = x 1 = y
 
+        void setRGB(uint8_t r,uint8_t g,uint8_t b ){PS4.setLed(r,g,b);PS4.sendToController();};
+
         void getThumbStickValues(uint8_t thumbStickNum);
 
         int getThumbStickLeftValuesX(){return thumbStickRawLeft[0];}; 
