@@ -107,10 +107,7 @@ void setup()
         dcMotorController.initDCMotor();
     
     if(isLCD)
-    {
         lcdController.initDisplay();
-    }
-
 
     delay(500);
 
@@ -184,8 +181,8 @@ void loop()
                 uartRemote.resetDataIN(2);
                 uartRemote.resetDataIN(3);
 
-                if(isDebug)
-                    uartRemote.logData("[Remote DataIN] ... ");
+                // if(isDebug)
+                //     uartRemote.logData("[Remote DataIN] ... ");
             }
 
             getRemoteDataTimer = 0;

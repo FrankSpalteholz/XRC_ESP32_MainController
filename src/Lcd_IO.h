@@ -3,7 +3,8 @@
 #include <SPI.h>
 #include "Wire.h"
 
-#include "Images/XRookieLogo.h"
+#include "Images/SqHouseLogo_WB.h"
+#include "Images/SqHouseLogo.h"
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -48,16 +49,16 @@ void Lcd_IO::initDisplay()
     display.display();
     delay(1000);
 
-    // // Clear the buffer.
-    // display.clearDisplay();
+    // Clear the buffer.
+    display.clearDisplay();
 
-    // // miniature bitmap display
-    // display.drawBitmap(0, 0,  image_XRookie_Logo, 128, 64, 1);
-    // display.display();
-    // delay(1000);
+    // miniature bitmap display
+    display.drawBitmap(0, 0,  image_data_SqHouseLogo, 128, 64, 1);
+    display.display();
+    delay(1000);
 
-    // display.display();
-    // display.clearDisplay();
+    display.display();
+    display.clearDisplay();
 }
 
 char *Lcd_IO::concatenateCharArrays(char array1[], char array2[], char *concateArray)
