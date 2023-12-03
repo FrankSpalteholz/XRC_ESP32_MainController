@@ -14,13 +14,16 @@ Servo_IO servoController = Servo_IO();
 DCMotor_IO dcMotorController = DCMotor_IO();
 ROS_IO rosController = ROS_IO();
 CCom uartRemote = CCom();
-
+Lcd_IO lcdController = Lcd_IO();
 
 //////////////////////////////////////////////////////////////////////////////////////
 
 // CHECK SPEED!!!! Especially if Yaw and Steer are fast enough
 elapsedMillis getRemoteDataTimer;
 const uint8_t getRemoteDataTimerDelay = 10;
+
+elapsedMillis drawOnDisplayDataTimer;
+const uint8_t drawOnDisplayDataTimerDelay = 10;
 
 elapsedMillis getPS4DataTimer;
 const uint8_t getPS4DataTimerDelay = 10;
@@ -61,8 +64,10 @@ bool isPS4THumbStickValuesDebug = 0;
 
 bool PS4ControllerMode = 0;
 bool RemoteControllerMode = 1;
-bool isServo = 1;
+
+bool isServo = 0;
 bool isDCMotor = 1;
+bool isLCD = 1;
 
 int PS4ControllerState = 0;
 int RemoteControllerState = 0;
@@ -88,15 +93,24 @@ void setup()
         if(isDebug)
          Serial.println("[Controller] ... PS4");
     }
+
     if(RemoteControllerMode)
     {   
         if(isDebug)
          Serial.println("[Controller] ... JETSON");
     }
+    
     if(isServo)
         initServoController();
+    
     if(isDCMotor)
         dcMotorController.initDCMotor();
+    
+    if(isLCD)
+    {
+        lcdController.initDisplay();
+    }
+
 
     delay(500);
 
@@ -110,6 +124,8 @@ void loop()
 {
 
 //////////////////////////////////////////////////////////////////////////////////////
+
+    
 
     if(PS4ControllerMode)
     {
@@ -173,6 +189,31 @@ void loop()
             }
 
             getRemoteDataTimer = 0;
+        }
+    }
+
+    if(isLCD)
+    {
+        if(drawOnDisplayDataTimer > drawOnDisplayDataTimerDelay)
+        {   
+            if(RemoteControllerMode)
+            {   
+                int data[4]; 
+                for (int i = 0; i < DATA_IN_COUNT; i++)
+                    data[i] = uartRemote.getDataIN(i);
+                lcdController.debugOutputDisplay(60, "JETSON", data);
+            }
+            
+            if(PS4ControllerMode)
+            {   
+                int data[4]; 
+                for (int i = 0; i < DATA_IN_COUNT; i++)
+                    data[i] = uartRemote.getDataIN(i);  // TODO IMPLEMENT PS4 DATA!!!!!
+                lcdController.debugOutputDisplay(60, "PS4", data);
+            }
+
+            
+            drawOnDisplayDataTimer = 0;
         }
     }
 
@@ -290,6 +331,5 @@ void ps4ServosControl()
         }
 
 }
-
 
 
